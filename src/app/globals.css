@@ -3,6 +3,18 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+
+  /* GhostDock palette */
+  --gd-bg: #010a06;
+  --gd-surface: #03120a;
+  --gd-surface-2: #071a10;
+  --gd-accent: #00c47a;
+  --gd-accent-glow: #00e5a0;
+  --gd-purple: #a855c8;
+  --gd-amber: #e8a040;
+  --gd-text: #f5f9f5;
+  --gd-muted: #c8d8c0;
+  --gd-error: #c4622a;
 }
 
 @theme inline {
@@ -10,6 +22,17 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+
+  --color-gd-bg: var(--gd-bg);
+  --color-gd-surface: var(--gd-surface);
+  --color-gd-surface-2: var(--gd-surface-2);
+  --color-gd-accent: var(--gd-accent);
+  --color-gd-accent-glow: var(--gd-accent-glow);
+  --color-gd-purple: var(--gd-purple);
+  --color-gd-amber: var(--gd-amber);
+  --color-gd-text: var(--gd-text);
+  --color-gd-muted: var(--gd-muted);
+  --color-gd-error: var(--gd-error);
 }
 
 @media (prefers-color-scheme: dark) {
