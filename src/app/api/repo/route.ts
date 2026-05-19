@@ -3,7 +3,7 @@ import { eq } from 'drizzle-orm';
 import { NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import { projects, users } from '@/lib/db/schema';
-import { fetchRepoData } from '@/lib/github/fetch';
+import { fetchRepoData, GithubFetchError } from '@/lib/github/fetch';
 import { isValidGithubUrl, parseGithubUrl } from '@/lib/github/urls';
 
 export async function POST(req: Request) {
@@ -27,21 +27,29 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'User not found' }, { status: 404 });
   }
 
-  const repoData = await fetchRepoData(parsed.owner, parsed.repo);
+  try {
+    const repoData = await fetchRepoData(parsed.owner, parsed.repo);
 
-  const [project] = await db
-    .insert(projects)
-    .values({
-      userId: user.id,
-      repoUrl: `github.com/${parsed.owner}/${parsed.repo}`,
-      repoOwner: parsed.owner,
-      repoName: parsed.repo,
-      fetchedAt: new Date(),
-      readmeRaw: repoData.readmeRaw,
-      descriptionParsed: repoData.description,
-      demoUrlParsed: repoData.homepage,
-    })
-    .returning({ id: projects.id });
+    const [project] = await db
+      .insert(projects)
+      .values({
+        userId: user.id,
+        repoUrl: `github.com/${parsed.owner}/${parsed.repo}`,
+        repoOwner: parsed.owner,
+        repoName: parsed.repo,
+        fetchedAt: new Date(),
+        readmeRaw: repoData.readmeRaw,
+        descriptionParsed: repoData.description,
+        demoUrlParsed: repoData.homepage,
+      })
+      .returning({ id: projects.id });
 
-  return NextResponse.json({ id: project.id }, { status: 201 });
+    return NextResponse.json({ id: project.id }, { status: 201 });
+  } catch (error) {
+    if (error instanceof GithubFetchError) {
+      const statusMap = { not_found: 404, private: 403, rate_limited: 429, unknown: 502 };
+      return NextResponse.json({ error: error.message }, { status: statusMap[error.code] });
+    }
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+  }
 }

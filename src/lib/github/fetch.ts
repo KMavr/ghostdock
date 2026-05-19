@@ -11,6 +11,16 @@ export type RawRepoData = {
   packageJson: Record<string, unknown> | null;
 };
 
+export class GithubFetchError extends Error {
+  constructor(
+    public readonly code: 'not_found' | 'private' | 'rate_limited' | 'unknown',
+    message: string,
+  ) {
+    super(message);
+    this.name = 'GithubFetchError';
+  }
+}
+
 const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
 
 const parsePackageJson = (
@@ -36,7 +46,20 @@ export const fetchRepoData = async (owner: string, repo: string): Promise<RawRep
   ]);
 
   if (repoRes.status === 'rejected') {
-    throw new Error(`Failed to fetch repo: ${repoRes.reason}`);
+    const err = repoRes.reason as {
+      status?: number;
+      response?: { headers: Record<string, string> };
+    };
+    if (err.status === 404) {
+      throw new GithubFetchError('not_found', 'Repository not found or private');
+    }
+    if (err.status === 403) {
+      const isRateLimited = err.response?.headers?.['x-ratelimit-remaining'] === '0';
+      const code = isRateLimited ? 'rate_limited' : 'private';
+      const message = isRateLimited ? 'GitHub rate limit exceeded' : 'Repository is private';
+      throw new GithubFetchError(code, message);
+    }
+    throw new GithubFetchError('unknown', String(repoRes.reason));
   }
 
   const repoData = repoRes.value.data;
