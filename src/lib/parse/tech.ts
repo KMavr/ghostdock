@@ -1,4 +1,4 @@
-import { KNOWN_PACKAGES, PRIORITY_PACKAGES } from '@/lib/parse/known-packages';
+import { KNOWN_PACKAGES, KNOWN_TOPICS, PRIORITY_PACKAGES } from '@/lib/parse/known-packages';
 
 type TechInput = {
   packageJson: Record<string, unknown> | null;
@@ -7,23 +7,29 @@ type TechInput = {
 };
 
 export const parseTechStack = (input: TechInput): string[] => {
-  const { packageJson } = input;
+  const { packageJson, topics, language } = input;
 
-  if (!packageJson) return [];
-
-  const deps = [
-    ...Object.keys((packageJson.dependencies as Record<string, string>) ?? {}),
-    ...Object.keys((packageJson.devDependencies as Record<string, string>) ?? {}),
-  ];
+  const deps = packageJson
+    ? [
+        ...Object.keys((packageJson.dependencies as Record<string, string>) ?? {}),
+        ...Object.keys((packageJson.devDependencies as Record<string, string>) ?? {}),
+      ]
+    : [];
 
   const known = deps.filter((dep) => dep in KNOWN_PACKAGES);
   const sorted = [
     ...known.filter((dep) => PRIORITY_PACKAGES.has(dep)),
     ...known.filter((dep) => !PRIORITY_PACKAGES.has(dep)),
   ];
-  const result = sorted.map((dep) => KNOWN_PACKAGES[dep]);
+  const fromPackages = sorted.map((dep) => KNOWN_PACKAGES[dep]);
 
-  const withFallback = result.length === 0 && input.language ? [input.language] : result;
+  const fromTopics = topics.filter((t) => t in KNOWN_TOPICS).map((t) => KNOWN_TOPICS[t]);
 
-  return [...new Set(withFallback)].slice(0, 8);
+  const combined = [...fromPackages, ...fromTopics];
+
+  if (combined.length === 0 && language) {
+    combined.push(language);
+  }
+
+  return [...new Set(combined)].slice(0, 8);
 };

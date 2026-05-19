@@ -143,3 +143,86 @@ export const PRIORITY_PACKAGES = new Set([
   'typescript',
   'tailwindcss',
 ]);
+
+export const KNOWN_TOPICS: Record<string, string> = {
+  // Frameworks & meta-frameworks
+  nextjs: 'Next.js',
+  nuxtjs: 'Nuxt',
+  remix: 'Remix',
+  gatsby: 'Gatsby',
+  astro: 'Astro',
+  sveltekit: 'SvelteKit',
+
+  // UI libraries
+  react: 'React',
+  vue: 'Vue',
+  vuejs: 'Vue',
+  svelte: 'Svelte',
+  angular: 'Angular',
+
+  // Languages
+  typescript: 'TypeScript',
+  javascript: 'JavaScript',
+  python: 'Python',
+  rust: 'Rust',
+  golang: 'Go',
+  go: 'Go',
+  ruby: 'Ruby',
+  java: 'Java',
+  kotlin: 'Kotlin',
+  swift: 'Swift',
+  'c-sharp': 'C#',
+  cpp: 'C++',
+  php: 'PHP',
+  elixir: 'Elixir',
+  haskell: 'Haskell',
+  scala: 'Scala',
+
+  // Styling
+  tailwind: 'Tailwind CSS',
+  tailwindcss: 'Tailwind CSS',
+
+  // Backend
+  express: 'Express',
+  fastapi: 'FastAPI',
+  django: 'Django',
+  flask: 'Flask',
+  rails: 'Rails',
+  laravel: 'Laravel',
+  nestjs: 'NestJS',
+  fastify: 'Fastify',
+  hono: 'Hono',
+  axum: 'Axum',
+  actix: 'Actix',
+  gin: 'Gin',
+  fiber: 'Fiber',
+  phoenix: 'Phoenix',
+
+  // Databases
+  postgresql: 'PostgreSQL',
+  postgres: 'PostgreSQL',
+  mysql: 'MySQL',
+  mongodb: 'MongoDB',
+  sqlite: 'SQLite',
+  redis: 'Redis',
+  supabase: 'Supabase',
+
+  // Mobile
+  'react-native': 'React Native',
+  expo: 'Expo',
+  flutter: 'Flutter',
+
+  // AI / ML
+  'machine-learning': 'Machine Learning',
+  'deep-learning': 'Deep Learning',
+  pytorch: 'PyTorch',
+  tensorflow: 'TensorFlow',
+  langchain: 'LangChain',
+  openai: 'OpenAI',
+
+  // Misc
+  graphql: 'GraphQL',
+  docker: 'Docker',
+  kubernetes: 'Kubernetes',
+  cli: 'CLI',
+};
