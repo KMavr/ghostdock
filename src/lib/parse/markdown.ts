@@ -4,4 +4,4 @@ import remarkParse from 'remark-parse';
 import { unified } from 'unified';
 
 export const parseMarkdown = (raw: string): Root =>
-  unified.use(remarkParse).use(remarkGfm).parse(raw);
+  unified().use(remarkParse).use(remarkGfm).parse(raw);
