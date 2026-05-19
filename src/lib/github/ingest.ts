@@ -1,0 +1,39 @@
+import { eq } from 'drizzle-orm';
+import { db } from '@/lib/db';
+import { projects, users } from '@/lib/db/schema';
+import { fetchRepoData } from '@/lib/github/fetch';
+import { isValidGithubUrl, parseGithubUrl } from '@/lib/github/urls';
+
+export const ingestRepo = async (url: string, clerkId: string): Promise<{ id: string }> => {
+  if (!url || !isValidGithubUrl(url)) {
+    throw new Error('Invalid GitHub URL');
+  }
+
+  const parsed = parseGithubUrl(url);
+  if (!parsed) {
+    throw new Error('Invalid GitHub URL');
+  }
+
+  const user = await db.query.users.findFirst({ where: eq(users.clerkId, clerkId) });
+  if (!user) {
+    throw new Error('User not found');
+  }
+
+  const repoData = await fetchRepoData(parsed.owner, parsed.repo);
+
+  const [project] = await db
+    .insert(projects)
+    .values({
+      userId: user.id,
+      repoUrl: `github.com/${parsed.owner}/${parsed.repo}`,
+      repoOwner: parsed.owner,
+      repoName: parsed.repo,
+      fetchedAt: new Date(),
+      readmeRaw: repoData.readmeRaw,
+      descriptionParsed: repoData.description,
+      demoUrlParsed: repoData.homepage,
+    })
+    .returning({ id: projects.id });
+
+  return { id: project.id };
+};
