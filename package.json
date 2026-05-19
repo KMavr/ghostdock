@@ -24,6 +24,7 @@
     ]
   },
   "dependencies": {
+    "@clerk/nextjs": "^7.3.5",
     "@neondatabase/serverless": "^1.1.0",
     "@tanstack/react-query": "^5.100.10",
     "class-variance-authority": "^0.7.1",
