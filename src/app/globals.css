@@ -6,14 +6,14 @@
 
   /* GhostDock palette */
   --gd-bg: #010a06;
-  --gd-surface: #03120a;
-  --gd-surface-2: #071a10;
+  --gd-surface: #0a2416;
+  --gd-surface-2: #123322;
   --gd-accent: #00c47a;
   --gd-accent-glow: #00e5a0;
   --gd-purple: #a855c8;
   --gd-amber: #e8a040;
   --gd-text: #f5f9f5;
-  --gd-muted: #c8d8c0;
+  --gd-muted: #c8d0cc;
   --gd-error: #c4622a;
 }
 
