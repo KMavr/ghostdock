@@ -3,6 +3,7 @@ import { db } from '@/lib/db';
 import { projects, users } from '@/lib/db/schema';
 import { fetchRepoData } from '@/lib/github/fetch';
 import { isValidGithubUrl, parseGithubUrl } from '@/lib/github/urls';
+import { parseRepoData } from '@/lib/parse';
 
 export const ingestRepo = async (url: string, clerkId: string): Promise<{ id: string }> => {
   if (!url || !isValidGithubUrl(url)) {
@@ -21,6 +22,8 @@ export const ingestRepo = async (url: string, clerkId: string): Promise<{ id: st
 
   const repoData = await fetchRepoData(parsed.owner, parsed.repo);
 
+  const parsedRepoData = parseRepoData(repoData);
+
   const [project] = await db
     .insert(projects)
     .values({
@@ -30,8 +33,10 @@ export const ingestRepo = async (url: string, clerkId: string): Promise<{ id: st
       repoName: parsed.repo,
       fetchedAt: new Date(),
       readmeRaw: repoData.readmeRaw,
-      descriptionParsed: repoData.description,
-      demoUrlParsed: repoData.homepage,
+      descriptionParsed: parsedRepoData.descriptionParsed,
+      demoUrlParsed: parsedRepoData.demoUrlParsed,
+      techStackParsed: parsedRepoData.techStackParsed,
+      sectionsParsed: parsedRepoData.sectionsParsed,
     })
     .returning({ id: projects.id });
 
