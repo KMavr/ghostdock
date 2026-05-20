@@ -2,6 +2,7 @@
 
 import { auth } from '@clerk/nextjs/server';
 import { and, eq } from 'drizzle-orm';
+import { revalidatePath } from 'next/cache';
 import { db } from '@/lib/db';
 import { projects, users } from '@/lib/db/schema';
 
@@ -35,6 +36,7 @@ export const updateProject = async (
     const name = formData.get('name') as string;
     const description = formData.get('description') as string;
     const demoUrl = formData.get('demoUrl') as string;
+    const techStack = JSON.parse((formData.get('techStack') as string) ?? '[]') as string[];
 
     await db
       .update(projects)
@@ -42,6 +44,7 @@ export const updateProject = async (
         nameOverride: name || null,
         descriptionOverride: description || null,
         demoUrlOverride: demoUrl || null,
+        techStackOverride: techStack,
         updatedAt: new Date(),
       })
       .where(eq(projects.id, id));
@@ -49,5 +52,6 @@ export const updateProject = async (
     return { error: error instanceof Error ? error.message : 'Something went wrong' };
   }
 
+  revalidatePath(`/dock/project/${id}`);
   return null;
 };

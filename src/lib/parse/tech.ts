@@ -31,5 +31,5 @@ export const parseTechStack = (input: TechInput): string[] => {
     combined.push(language);
   }
 
-  return [...new Set(combined)].slice(0, 12);
+  return [...new Set(combined)];
 };

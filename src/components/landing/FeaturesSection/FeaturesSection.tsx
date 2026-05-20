@@ -20,7 +20,7 @@ function FeaturesSection({ content }: FeaturesSectionProps) {
 const styles = {
   container: cn('space-y-4'),
   heading: cn('text-gd-text text-2xl font-semibold'),
-  body: cn('prose prose-invert prose-sm text-gd-muted max-w-none'),
+  body: cn('prose prose-invert prose-sm text-gd-muted max-w-none [&_li]:mb-2'),
 };
 
 export default FeaturesSection;

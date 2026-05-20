@@ -2,6 +2,7 @@
 
 import { useActionState } from 'react';
 import type { InferSelectModel } from 'drizzle-orm';
+import TechStackEditor from '@/components/landing/TechStackEditor/TechStackEditor';
 import type { projects } from '@/lib/db/schema';
 import { cn } from '@/lib/utils/cn';
 import type { ActionState } from './actions';
@@ -57,6 +58,8 @@ function ProjectForm({ project, action }: ProjectFormProps) {
           className={styles.input}
         />
       </div>
+
+      <TechStackEditor initialValue={project.techStackOverride ?? project.techStackParsed ?? []} />
 
       {state?.error && <p className={styles.error}>{state.error}</p>}
 
