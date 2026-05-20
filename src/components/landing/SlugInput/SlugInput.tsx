@@ -4,15 +4,12 @@ import { useEffect, useState } from 'react';
 import { cva } from 'class-variance-authority';
 import { checkSlugAvailability } from '@/app/dock/project/[id]/actions';
 import { cn } from '@/lib/utils/cn';
-import { SLUG_REGEX, SLUG_STATUS, type SlugStatus } from '@/lib/utils/slug';
+import { formatSlug, SLUG_REGEX, SLUG_STATUS, type SlugStatus, trimSlug } from '@/lib/utils/slug';
 
 interface SlugInputProps {
   defaultValue?: string;
   projectId: string;
 }
-
-const formatSlug = (value: string) => value.toLowerCase().replace(/[^a-z0-9-]+/g, '-');
-const trimSlug = (value: string) => value.replace(/^-+|-+$/g, '');
 
 const STATUS_MESSAGE: Record<SlugStatus | 'checking', string> = {
   available: 'Available',

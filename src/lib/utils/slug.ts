@@ -7,3 +7,7 @@ export const SLUG_STATUS = {
 } as const;
 
 export type SlugStatus = (typeof SLUG_STATUS)[keyof typeof SLUG_STATUS];
+
+export const formatSlug = (value: string) => value.toLowerCase().replace(/[^a-z0-9-]+/g, '-');
+
+export const trimSlug = (value: string) => value.replace(/^-+|-+$/g, '');

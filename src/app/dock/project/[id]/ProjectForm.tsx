@@ -59,10 +59,7 @@ function ProjectForm({ project, action }: ProjectFormProps) {
           className={styles.input}
         />
       </div>
-      <SlugInput
-        projectId={project.id}
-        defaultValue={project.slug ?? project.nameOverride ?? project.repoName}
-      />
+      <SlugInput projectId={project.id} defaultValue={project.slug ?? ''} />
 
       <TechStackEditor initialValue={project.techStackOverride ?? project.techStackParsed ?? []} />
 

@@ -1,9 +1,23 @@
-import { and, eq } from 'drizzle-orm';
+import { and, eq, not } from 'drizzle-orm';
 import { db } from '@/lib/db';
 import { projects, users } from '@/lib/db/schema';
 import { fetchRepoData } from '@/lib/github/fetch';
 import { isValidGithubUrl, parseGithubUrl } from '@/lib/github/urls';
 import { parseRepoData } from '@/lib/parse';
+import { formatSlug, trimSlug } from '@/lib/utils/slug';
+
+const resolveSlug = async (repoName: string, excludeId?: string): Promise<string | null> => {
+  const slug = trimSlug(formatSlug(repoName));
+  if (!slug) return null;
+
+  const existing = await db.query.projects.findFirst({
+    where: excludeId
+      ? and(eq(projects.slug, slug), not(eq(projects.id, excludeId)))
+      : eq(projects.slug, slug),
+  });
+
+  return existing ? null : slug;
+};
 
 export const ingestRepo = async (url: string, clerkId: string): Promise<{ id: string }> => {
   if (!url || !isValidGithubUrl(url)) {
@@ -42,6 +56,7 @@ export const ingestRepo = async (url: string, clerkId: string): Promise<{ id: st
         techStackParsed: parsedRepoData.techStackParsed,
         sectionsParsed: parsedRepoData.sectionsParsed,
         updatedAt: new Date(),
+        ...(existing.slug ? {} : { slug: await resolveSlug(existing.repoName, existing.id) }),
       })
       .where(eq(projects.id, existing.id));
 
@@ -61,6 +76,7 @@ export const ingestRepo = async (url: string, clerkId: string): Promise<{ id: st
       demoUrlParsed: parsedRepoData.demoUrlParsed,
       techStackParsed: parsedRepoData.techStackParsed,
       sectionsParsed: parsedRepoData.sectionsParsed,
+      slug: await resolveSlug(parsed.repo),
     })
     .returning({ id: projects.id });
 

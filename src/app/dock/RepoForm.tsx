@@ -17,7 +17,7 @@ function RepoForm() {
         className={styles.input}
       />
       <button type="submit" disabled={pending} className={styles.button}>
-        {pending ? 'Charting course...' : 'Set Sail'}
+        {pending ? 'Charting course...' : 'Chart Course'}
       </button>
       {state?.error && <p className={styles.error}>{state.error}</p>}
     </form>

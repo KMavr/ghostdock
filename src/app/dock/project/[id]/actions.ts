@@ -2,6 +2,7 @@
 
 import { auth } from '@clerk/nextjs/server';
 import { and, eq, not } from 'drizzle-orm';
+import type { InferSelectModel } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 import { db } from '@/lib/db';
 import { projects, users } from '@/lib/db/schema';
@@ -9,29 +10,33 @@ import { SLUG_REGEX, SLUG_STATUS, type SlugStatus } from '@/lib/utils/slug';
 
 export type ActionState = { error: string } | null;
 
+type Project = InferSelectModel<typeof projects>;
+type AuthorizedProject =
+  | { project: Project; error?: undefined }
+  | { error: ActionState; project?: undefined };
+
+const getAuthorizedProject = async (id: string): Promise<AuthorizedProject> => {
+  const { userId: clerkId } = await auth();
+  if (!clerkId) return { error: { error: 'Unauthorized' } };
+
+  const user = await db.query.users.findFirst({ where: eq(users.clerkId, clerkId) });
+  if (!user) return { error: { error: 'User not found' } };
+
+  const project = await db.query.projects.findFirst({
+    where: and(eq(projects.id, id), eq(projects.userId, user.id)),
+  });
+  if (!project) return { error: { error: 'Project not found' } };
+
+  return { project };
+};
+
 export const updateProject = async (
   id: string,
   _prev: ActionState,
   formData: FormData,
 ): Promise<ActionState> => {
-  const { userId: clerkId } = await auth();
-
-  if (!clerkId) {
-    return { error: 'Unauthorized' };
-  }
-
-  const user = await db.query.users.findFirst({ where: eq(users.clerkId, clerkId) });
-  if (!user) {
-    return { error: 'User not found' };
-  }
-
-  const project = await db.query.projects.findFirst({
-    where: and(eq(projects.id, id), eq(projects.userId, user.id)),
-  });
-
-  if (!project) {
-    return { error: 'Project not found' };
-  }
+  const result = await getAuthorizedProject(id);
+  if (result.error) return result.error;
 
   try {
     const name = formData.get('name') as string;
@@ -51,8 +56,8 @@ export const updateProject = async (
         updatedAt: new Date(),
       })
       .where(eq(projects.id, id));
-  } catch (error) {
-    return { error: error instanceof Error ? error.message : 'Something went wrong' };
+  } catch (err) {
+    return { error: err instanceof Error ? err.message : 'Something went wrong' };
   }
 
   revalidatePath(`/dock/project/${id}`);
@@ -72,4 +77,24 @@ export const checkSlugAvailability = async (
   });
 
   return existing ? SLUG_STATUS.taken : SLUG_STATUS.available;
+};
+
+export const publishProject = async (id: string): Promise<ActionState> => {
+  const result = await getAuthorizedProject(id);
+  if (result.error) return result.error;
+
+  const { project } = result;
+  if (!project?.slug) return { error: 'A slug is required before publishing' };
+
+  try {
+    await db
+      .update(projects)
+      .set({ isPublished: true, publishedAt: new Date(), updatedAt: new Date() })
+      .where(eq(projects.id, id));
+  } catch (err) {
+    return { error: err instanceof Error ? err.message : 'Something went wrong' };
+  }
+
+  revalidatePath(`/dock/project/${id}`);
+  return null;
 };

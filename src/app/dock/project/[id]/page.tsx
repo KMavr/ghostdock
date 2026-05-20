@@ -5,6 +5,7 @@ import ProjectForm from '@/app/dock/project/[id]/ProjectForm';
 import FeaturesSection from '@/components/landing/FeaturesSection/FeaturesSection';
 import HeroSection from '@/components/landing/HeroSection/HeroSection';
 import InstallSection from '@/components/landing/InstallSection/InstallSection';
+import PublishButton from '@/components/landing/PublishButton/PublishButton';
 import UsageSection from '@/components/landing/UsageSection/UsageSection';
 import { db } from '@/lib/db';
 import { projects } from '@/lib/db/schema';
@@ -36,8 +37,22 @@ async function Page({ params }: PageProps) {
     <main className={styles.root}>
       <div className={styles.inner}>
         <div className={styles.header}>
-          <p className={styles.owner}>{project.repoOwner}</p>
-          <h1 className={styles.title}>{project.nameOverride ?? project.repoName}</h1>
+          <div>
+            <p className={styles.owner}>{project.repoOwner}</p>
+            <h1 className={styles.title}>{project.nameOverride ?? project.repoName}</h1>
+          </div>
+          <div className={styles.actions}>
+            <PublishButton
+              projectId={project.id}
+              hasSlug={!!project.slug}
+              isPublished={project.isPublished}
+            />
+            {project.isPublished && project.slug && (
+              <a href={`/p/${project.slug}`} className={styles.viewLink}>
+                View live page →
+              </a>
+            )}
+          </div>
         </div>
 
         <div className={styles.grid}>
@@ -69,7 +84,9 @@ async function Page({ params }: PageProps) {
 const styles = {
   root: cn('bg-gd-bg min-h-screen px-4 py-12'),
   inner: cn('mx-auto max-w-5xl'),
-  header: cn('mb-10'),
+  header: cn('mb-10 flex flex-row items-start justify-between'),
+  actions: cn('flex items-center gap-3'),
+  viewLink: cn('text-gd-accent hover:text-gd-accent-glow text-sm font-medium transition-colors'),
   owner: cn('text-gd-muted text-sm'),
   title: cn('text-gd-text mt-1 text-4xl font-semibold tracking-tight'),
   grid: cn('grid grid-cols-1 gap-8 lg:grid-cols-2'),
