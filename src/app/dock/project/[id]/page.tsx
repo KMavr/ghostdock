@@ -12,11 +12,11 @@ import { projects } from '@/lib/db/schema';
 import type { ParsedSections } from '@/lib/parse/sections';
 import { cn } from '@/lib/utils/cn';
 
-interface PageProps {
+interface ProjectPageProps {
   params: Promise<{ id: string }>;
 }
 
-async function ProjectPage({ params }: PageProps) {
+async function ProjectPage({ params }: ProjectPageProps) {
   const { id } = await params;
 
   const project = await db.query.projects.findFirst({ where: eq(projects.id, id) });

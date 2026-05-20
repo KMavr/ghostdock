@@ -88,6 +88,7 @@ export const publishProject = async (id: string): Promise<ActionState> => {
       .update(projects)
       .set({ isPublished: true, publishedAt: new Date(), updatedAt: new Date() })
       .where(eq(projects.id, id));
+    revalidatePath(`/p/${project.slug}`);
   } catch (err) {
     return { error: err instanceof Error ? err.message : 'Something went wrong' };
   }
