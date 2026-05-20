@@ -42,11 +42,7 @@ async function Page({ params }: PageProps) {
             <h1 className={styles.title}>{project.nameOverride ?? project.repoName}</h1>
           </div>
           <div className={styles.actions}>
-            <PublishButton
-              projectId={project.id}
-              hasSlug={!!project.slug}
-              isPublished={project.isPublished}
-            />
+            <PublishButton projectId={project.id} hasSlug={!!project.slug} />
             {project.isPublished && project.slug && (
               <a href={`/p/${project.slug}`} className={styles.viewLink}>
                 View live page →
