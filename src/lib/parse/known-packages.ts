@@ -101,6 +101,18 @@ export const KNOWN_PACKAGES: Record<string, string> = {
   '@langchain/core': 'LangChain',
   ollama: 'Ollama',
 
+  // Animation
+  'framer-motion': 'Framer Motion',
+  motion: 'Motion',
+  gsap: 'GSAP',
+  '@react-spring/web': 'React Spring',
+
+  // Routing
+  'react-router-dom': 'React Router',
+  'react-router': 'React Router',
+  '@tanstack/react-router': 'TanStack Router',
+  wouter: 'Wouter',
+
   // Mobile
   'react-native': 'React Native',
   expo: 'Expo',

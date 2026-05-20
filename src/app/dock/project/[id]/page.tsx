@@ -2,8 +2,13 @@ import { eq } from 'drizzle-orm';
 import { notFound } from 'next/navigation';
 import { updateProject } from '@/app/dock/project/[id]/actions';
 import ProjectForm from '@/app/dock/project/[id]/ProjectForm';
+import FeaturesSection from '@/components/landing/FeaturesSection/FeaturesSection';
+import HeroSection from '@/components/landing/HeroSection/HeroSection';
+import InstallSection from '@/components/landing/InstallSection/InstallSection';
+import UsageSection from '@/components/landing/UsageSection/UsageSection';
 import { db } from '@/lib/db';
 import { projects } from '@/lib/db/schema';
+import type { ParsedSections } from '@/lib/parse/sections';
 import { cn } from '@/lib/utils/cn';
 
 interface PageProps {
@@ -21,6 +26,12 @@ async function Page({ params }: PageProps) {
 
   const action = updateProject.bind(null, id);
 
+  const name = project.nameOverride ?? project.repoName;
+  const description = project.descriptionOverride ?? project.descriptionParsed;
+  const demoUrl = project.demoUrlOverride ?? project?.demoUrlParsed;
+  const techStack = project.techStackOverride ?? project.techStackParsed;
+  const sections = (project.sectionsParsed ?? {}) as ParsedSections;
+
   return (
     <main className={styles.root}>
       <div className={styles.inner}>
@@ -35,9 +46,19 @@ async function Page({ params }: PageProps) {
             <ProjectForm project={project} action={action} />
           </section>
 
-          <section className={styles.readmeSection}>
-            <h2 className={styles.sectionTitle}>README</h2>
-            <pre className={styles.readme}>{project.readmeRaw ?? 'No README found.'}</pre>
+          <section className={styles.previewSection}>
+            <h2 className={styles.sectionTitle}>Preview</h2>
+            <div className={styles.preview}>
+              <HeroSection
+                name={name}
+                description={description ?? ''}
+                demoUrl={demoUrl}
+                techStack={techStack ?? []}
+              />
+              {sections.features && <FeaturesSection content={sections.features} />}
+              {sections.installation && <InstallSection content={sections.installation} />}
+              {sections.usage && <UsageSection content={sections.usage} />}
+            </div>
           </section>
         </div>
       </div>
@@ -53,10 +74,10 @@ const styles = {
   title: cn('text-gd-text mt-1 text-4xl font-semibold tracking-tight'),
   grid: cn('grid grid-cols-1 gap-8 lg:grid-cols-2'),
   formSection: cn('flex flex-col gap-4'),
-  readmeSection: cn('flex flex-col gap-4'),
+  previewSection: cn('flex flex-col gap-4'),
   sectionTitle: cn('text-gd-muted text-xs font-semibold tracking-widest uppercase'),
-  readme: cn(
-    'border-gd-surface-2 bg-gd-surface text-gd-muted overflow-auto rounded-lg border p-4 text-sm whitespace-pre-wrap',
+  preview: cn(
+    'border-gd-surface-2 bg-gd-surface flex flex-col gap-10 overflow-auto rounded-lg border p-6',
   ),
 };
 
