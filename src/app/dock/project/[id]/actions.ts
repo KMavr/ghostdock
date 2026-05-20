@@ -1,10 +1,11 @@
 'use server';
 
 import { auth } from '@clerk/nextjs/server';
-import { and, eq } from 'drizzle-orm';
+import { and, eq, not } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 import { db } from '@/lib/db';
 import { projects, users } from '@/lib/db/schema';
+import { SLUG_REGEX, SLUG_STATUS, type SlugStatus } from '@/lib/utils/slug';
 
 export type ActionState = { error: string } | null;
 
@@ -54,4 +55,19 @@ export const updateProject = async (
 
   revalidatePath(`/dock/project/${id}`);
   return null;
+};
+
+export const checkSlugAvailability = async (
+  slug: string,
+  projectId: string,
+): Promise<SlugStatus> => {
+  if (!slug || !SLUG_REGEX.test(slug)) {
+    return SLUG_STATUS.invalid;
+  }
+
+  const existing = await db.query.projects.findFirst({
+    where: and(not(eq(projects.id, projectId)), eq(projects.slug, slug)),
+  });
+
+  return existing ? SLUG_STATUS.taken : SLUG_STATUS.available;
 };

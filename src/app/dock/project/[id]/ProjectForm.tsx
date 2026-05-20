@@ -2,6 +2,7 @@
 
 import { useActionState } from 'react';
 import type { InferSelectModel } from 'drizzle-orm';
+import SlugInput from '@/components/landing/SlugInput/SlugInput';
 import TechStackEditor from '@/components/landing/TechStackEditor/TechStackEditor';
 import type { projects } from '@/lib/db/schema';
 import { cn } from '@/lib/utils/cn';
@@ -58,6 +59,10 @@ function ProjectForm({ project, action }: ProjectFormProps) {
           className={styles.input}
         />
       </div>
+      <SlugInput
+        projectId={project.id}
+        defaultValue={project.slug ?? project.nameOverride ?? project.repoName}
+      />
 
       <TechStackEditor initialValue={project.techStackOverride ?? project.techStackParsed ?? []} />
 
