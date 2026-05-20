@@ -38,6 +38,7 @@ export const updateProject = async (
     const description = formData.get('description') as string;
     const demoUrl = formData.get('demoUrl') as string;
     const techStack = JSON.parse((formData.get('techStack') as string) ?? '[]') as string[];
+    const slug = formData.get('slug') as string;
 
     await db
       .update(projects)
@@ -46,6 +47,7 @@ export const updateProject = async (
         descriptionOverride: description || null,
         demoUrlOverride: demoUrl || null,
         techStackOverride: techStack,
+        slug: slug || null,
         updatedAt: new Date(),
       })
       .where(eq(projects.id, id));
