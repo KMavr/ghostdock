@@ -1,4 +1,14 @@
-import { boolean, index, jsonb, pgEnum, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
+import {
+  boolean,
+  index,
+  jsonb,
+  pgEnum,
+  pgTable,
+  text,
+  timestamp,
+  uuid,
+  uniqueIndex,
+} from 'drizzle-orm/pg-core';
 
 export const planEnum = pgEnum('plan', ['free', 'pro']);
 
@@ -41,5 +51,8 @@ export const projects = pgTable(
     createdAt: timestamp('created_at').defaultNow().notNull(),
     updatedAt: timestamp('updated_at').defaultNow().notNull(),
   },
-  (table) => [index('projects_user_id_idx').on(table.userId)],
+  (table) => [
+    index('projects_user_id_idx').on(table.userId),
+    uniqueIndex('projects_user_repo_uniq').on(table.userId, table.repoUrl),
+  ],
 );

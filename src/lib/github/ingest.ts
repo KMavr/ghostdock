@@ -1,4 +1,4 @@
-import { eq } from 'drizzle-orm';
+import { and, eq } from 'drizzle-orm';
 import { db } from '@/lib/db';
 import { projects, users } from '@/lib/db/schema';
 import { fetchRepoData } from '@/lib/github/fetch';
@@ -23,6 +23,30 @@ export const ingestRepo = async (url: string, clerkId: string): Promise<{ id: st
   const repoData = await fetchRepoData(parsed.owner, parsed.repo);
 
   const parsedRepoData = parseRepoData(repoData);
+
+  const existing = await db.query.projects.findFirst({
+    where: and(
+      eq(projects.userId, user.id),
+      eq(projects.repoUrl, `github.com/${parsed.owner}/${parsed.repo}`),
+    ),
+  });
+
+  if (existing) {
+    await db
+      .update(projects)
+      .set({
+        fetchedAt: new Date(),
+        readmeRaw: repoData.readmeRaw,
+        descriptionParsed: parsedRepoData.descriptionParsed,
+        demoUrlParsed: parsedRepoData.demoUrlParsed,
+        techStackParsed: parsedRepoData.techStackParsed,
+        sectionsParsed: parsedRepoData.sectionsParsed,
+        updatedAt: new Date(),
+      })
+      .where(eq(projects.id, existing.id));
+
+    return { id: existing.id };
+  }
 
   const [project] = await db
     .insert(projects)
