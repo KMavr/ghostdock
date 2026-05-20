@@ -50,28 +50,23 @@ body {
 }
 
 @keyframes bob {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-4px);
-  }
-}
-
-@keyframes wave {
   0% {
-    transform: translateX(0);
+    transform: translateY(0) translateX(0) rotate(-4deg);
+  }
+  25% {
+    transform: translateY(-2px) translateX(2px) rotate(0deg);
   }
   50% {
-    transform: translateX(-4px);
+    transform: translateY(0) translateX(3px) rotate(4deg);
+  }
+  75% {
+    transform: translateY(-1px) translateX(1px) rotate(0deg);
   }
   100% {
-    transform: translateX(0);
+    transform: translateY(0) translateX(0) rotate(-3deg);
   }
 }
 
 @theme inline {
-  --animate-bob: bob 1.5s ease-in-out infinite;
-  --animate-wave: wave 1.2s ease-in-out infinite;
+  --animate-bob: bob 2.5s ease-in-out infinite;
 }

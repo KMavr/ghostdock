@@ -27,7 +27,7 @@ function PublishButton({ projectId, hasSlug }: PublishButtonProps) {
       title={!hasSlug ? 'Save a slug first' : undefined}
       className={buttonVariants({ pending })}>
       <span className={cn(hasSlug && !pending && styles.shipAnimate)}>
-        <GiShoonerSailboat className="h-5 w-5" aria-hidden="true" />
+        <GiShoonerSailboat className="h-5 w-5 drop-shadow-sm" aria-hidden="true" />
       </span>
       <span>{pending ? 'Setting sail...' : 'Set Sail'}</span>
     </button>
