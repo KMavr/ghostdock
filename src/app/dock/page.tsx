@@ -1,30 +1,46 @@
-import RepoForm from '@/app/dock/RepoForm';
+import { eq } from 'drizzle-orm';
+import EmptyDock from '@/app/dock/_components/EmptyDock/EmptyDock';
+import ProjectGrid from '@/app/dock/_components/ProjectGrid/ProjectGrid';
+import { getCurrentUser } from '@/lib/auth/getCurrentUser';
+import { db } from '@/lib/db';
+import { projects } from '@/lib/db/schema';
 import { cn } from '@/lib/utils/cn';
 
-function Page() {
+async function DockPage() {
+  const user = await getCurrentUser();
+  if (!user) return null;
+
+  const userProjects = await db.query.projects.findMany({
+    where: eq(projects.userId, user.id),
+    columns: {
+      id: true,
+      repoOwner: true,
+      repoName: true,
+      nameOverride: true,
+      slug: true,
+      isPublished: true,
+    },
+  });
+
   return (
     <main className={styles.root}>
-      <div className={styles.card}>
-        <div className={styles.header}>
-          <span className={styles.anchor}>⚓</span>
-          <h1 className={styles.title}>The Dock</h1>
-          <p className={styles.subtitle}>
-            Paste a public GitHub repo URL and we&apos;ll build your landing page.
-          </p>
+      {userProjects.length > 0 ? (
+        <div className={styles.grid}>
+          <ProjectGrid projects={userProjects} />
         </div>
-        <RepoForm />
-      </div>
+      ) : (
+        <div className={styles.centered}>
+          <EmptyDock />
+        </div>
+      )}
     </main>
   );
 }
 
 const styles = {
-  root: cn('bg-gd-bg flex min-h-screen flex-col items-center justify-center px-4'),
-  card: cn('w-full max-w-lg'),
-  header: cn('mb-8 text-center'),
-  anchor: cn('text-4xl'),
-  title: cn('text-gd-text mt-3 text-3xl font-semibold tracking-tight'),
-  subtitle: cn('text-gd-muted mt-2'),
+  root: cn('bg-gd-bg min-h-screen px-4'),
+  centered: cn('flex min-h-screen flex-col items-center justify-center'),
+  grid: cn('mx-auto max-w-5xl py-12'),
 };
 
-export default Page;
+export default DockPage;

@@ -1,17 +1,15 @@
-import { auth } from '@clerk/nextjs/server';
 import { NextResponse } from 'next/server';
+import { getCurrentUser } from '@/lib/auth/getCurrentUser';
 import { GithubFetchError } from '@/lib/github/fetch';
 import { ingestRepo } from '@/lib/github/ingest';
 
 export async function POST(req: Request) {
-  const { userId: clerkId } = await auth();
-  if (!clerkId) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  }
+  const user = await getCurrentUser();
+  if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
   try {
     const { url } = await req.json();
-    const { id } = await ingestRepo(url, clerkId);
+    const { id } = await ingestRepo(url, user.id);
     return NextResponse.json({ id }, { status: 201 });
   } catch (error) {
     if (error instanceof GithubFetchError) {

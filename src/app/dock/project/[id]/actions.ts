@@ -1,11 +1,11 @@
 'use server';
 
-import { auth } from '@clerk/nextjs/server';
 import { and, eq, not } from 'drizzle-orm';
 import type { InferSelectModel } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
+import { getCurrentUser } from '@/lib/auth/getCurrentUser';
 import { db } from '@/lib/db';
-import { projects, users } from '@/lib/db/schema';
+import { projects } from '@/lib/db/schema';
 import { SLUG_REGEX, SLUG_STATUS, type SlugStatus } from '@/lib/utils/slug';
 
 export type ActionState = { error: string } | null;
@@ -16,11 +16,8 @@ type AuthorizedProject =
   | { error: ActionState; project?: undefined };
 
 const getAuthorizedProject = async (id: string): Promise<AuthorizedProject> => {
-  const { userId: clerkId } = await auth();
-  if (!clerkId) return { error: { error: 'Unauthorized' } };
-
-  const user = await db.query.users.findFirst({ where: eq(users.clerkId, clerkId) });
-  if (!user) return { error: { error: 'User not found' } };
+  const user = await getCurrentUser();
+  if (!user) return { error: { error: 'Unauthorized' } };
 
   const project = await db.query.projects.findFirst({
     where: and(eq(projects.id, id), eq(projects.userId, user.id)),

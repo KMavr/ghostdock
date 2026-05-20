@@ -16,7 +16,7 @@ interface PageProps {
   params: Promise<{ id: string }>;
 }
 
-async function Page({ params }: PageProps) {
+async function ProjectPage({ params }: PageProps) {
   const { id } = await params;
 
   const project = await db.query.projects.findFirst({ where: eq(projects.id, id) });
@@ -94,4 +94,4 @@ const styles = {
   ),
 };
 
-export default Page;
+export default ProjectPage;
