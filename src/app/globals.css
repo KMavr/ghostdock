@@ -1,11 +1,9 @@
+/* Hallmark · genre: modern-minimal · macrostructure: Marquee Hero · theme: custom-neutral · enrichment: none · nav: none · footer: Ft2 */
 @import 'tailwindcss';
 @plugin '@tailwindcss/typography';
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-
-  /* GhostDock palette */
+  /* GhostDock app palette (ghost-pirate theme — dock + marketing only) */
   --gd-bg: #010a06;
   --gd-surface: #0a2416;
   --gd-surface-2: #123322;
@@ -16,11 +14,57 @@
   --gd-text: #f5f9f5;
   --gd-muted: #c8d0cc;
   --gd-error: #c4622a;
+
+  /* Public-page palette (/p/*) — neutral, decoupled from --gd-*. Light by default. */
+  --pp-paper: oklch(98.5% 0.003 250);
+  --pp-paper-2: oklch(96.5% 0.004 250);
+  --pp-rule: oklch(90% 0.005 250);
+  --pp-muted: oklch(48% 0.008 250);
+  --pp-ink: oklch(22% 0.01 250);
+  --pp-ink-strong: oklch(15% 0.012 250);
+  --pp-focus: oklch(58% 0.15 250);
+
+  --pp-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --pp-ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --pp-dur-micro: 120ms;
+  --pp-dur-short: 220ms;
+}
+
+/* Public page follows the visitor's OS preference until they override it. */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --pp-paper: oklch(20% 0.006 250);
+    --pp-paper-2: oklch(24% 0.007 250);
+    --pp-rule: oklch(32% 0.008 250);
+    --pp-muted: oklch(68% 0.008 250);
+    --pp-ink: oklch(93% 0.005 250);
+    --pp-ink-strong: oklch(97% 0.004 250);
+    --pp-focus: oklch(70% 0.14 250);
+  }
+}
+
+/* Explicit visitor override — set on <html> by the public page. Wins over the media query. */
+[data-pp-theme='light'] {
+  --pp-paper: oklch(98.5% 0.003 250);
+  --pp-paper-2: oklch(96.5% 0.004 250);
+  --pp-rule: oklch(90% 0.005 250);
+  --pp-muted: oklch(48% 0.008 250);
+  --pp-ink: oklch(22% 0.01 250);
+  --pp-ink-strong: oklch(15% 0.012 250);
+  --pp-focus: oklch(58% 0.15 250);
+}
+
+[data-pp-theme='dark'] {
+  --pp-paper: oklch(20% 0.006 250);
+  --pp-paper-2: oklch(24% 0.007 250);
+  --pp-rule: oklch(32% 0.008 250);
+  --pp-muted: oklch(68% 0.008 250);
+  --pp-ink: oklch(93% 0.005 250);
+  --pp-ink-strong: oklch(97% 0.004 250);
+  --pp-focus: oklch(70% 0.14 250);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 
@@ -34,19 +78,25 @@
   --color-gd-text: var(--gd-text);
   --color-gd-muted: var(--gd-muted);
   --color-gd-error: var(--gd-error);
+
+  --color-pp-paper: var(--pp-paper);
+  --color-pp-paper-2: var(--pp-paper-2);
+  --color-pp-rule: var(--pp-rule);
+  --color-pp-muted: var(--pp-muted);
+  --color-pp-ink: var(--pp-ink);
+  --color-pp-ink-strong: var(--pp-ink-strong);
+  --color-pp-focus: var(--pp-focus);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html,
+body {
+  overflow-x: clip;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--gd-bg);
+  color: var(--gd-text);
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
 }
 
 @keyframes bob {

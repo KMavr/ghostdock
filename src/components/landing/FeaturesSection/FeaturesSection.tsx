@@ -1,5 +1,4 @@
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
+import Markdown from '@/components/landing/Markdown/Markdown';
 import { cn } from '@/lib/utils/cn';
 
 interface FeaturesSectionProps {
@@ -8,19 +7,16 @@ interface FeaturesSectionProps {
 
 function FeaturesSection({ content }: FeaturesSectionProps) {
   return (
-    <section className={styles.container}>
+    <section className={styles.section}>
       <h2 className={styles.heading}>Features</h2>
-      <div className={styles.body}>
-        <ReactMarkdown remarkPlugins={[remarkGfm]}>{content}</ReactMarkdown>
-      </div>
+      <Markdown content={content} />
     </section>
   );
 }
 
 const styles = {
-  container: cn('space-y-4'),
-  heading: cn('text-gd-text text-2xl font-semibold'),
-  body: cn('prose prose-invert prose-sm text-gd-muted max-w-none [&_li]:mb-2'),
+  section: cn('flex flex-col gap-5'),
+  heading: cn('text-pp-ink-strong text-2xl font-semibold tracking-[-0.02em]'),
 };
 
 export default FeaturesSection;

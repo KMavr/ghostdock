@@ -38,9 +38,9 @@ async function DockPage() {
 }
 
 const styles = {
-  root: cn('bg-gd-bg min-h-screen px-4'),
-  centered: cn('flex min-h-screen flex-col items-center justify-center'),
-  grid: cn('mx-auto max-w-5xl py-12'),
+  root: cn('flex min-h-screen flex-col px-4'),
+  centered: cn('mx-auto flex w-full max-w-5xl flex-1 flex-col justify-center'),
+  grid: cn('mx-auto w-full max-w-5xl py-12'),
 };
 
 export default DockPage;

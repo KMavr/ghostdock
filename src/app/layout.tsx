@@ -1,4 +1,5 @@
 import { ClerkProvider } from '@clerk/nextjs';
+import { dark } from '@clerk/themes';
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import Providers from '@/lib/providers';
@@ -15,21 +16,16 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000'),
   title: 'GhostDock',
   description: 'Turn any public GitHub repo into a beautiful landing page — in seconds.',
 };
 
+// Clerk's accessible dark base theme, tinted with the GhostDock accent.
 const clerkAppearance = {
+  baseTheme: dark,
   variables: {
-    colorBackground: '#c8d0cc',
-    colorInputBackground: '#f0f4f2',
-    colorPrimary: '#00a865',
-    colorText: '#0a2416',
-    colorTextSecondary: '#3d5248',
-    colorTextOnPrimaryBackground: '#f5f9f5',
-    colorDanger: '#c4622a',
-    colorNeutral: '#3d5248',
-    colorInputText: '#0a2416',
+    colorPrimary: '#00c47a',
     borderRadius: '0.5rem',
     fontFamily: 'var(--font-geist-sans)',
   },
@@ -42,7 +38,10 @@ function RootLayout({
 }>) {
   return (
     <ClerkProvider appearance={clerkAppearance}>
-      <html lang="en" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
+      <html
+        lang="en"
+        suppressHydrationWarning
+        className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
         <body className="flex min-h-full flex-col">
           <Providers>{children}</Providers>
         </body>

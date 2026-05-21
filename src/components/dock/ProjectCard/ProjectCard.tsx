@@ -26,7 +26,7 @@ function ProjectCard({
         <p className={styles.owner}>{repoOwner}</p>
         <h2 className={styles.name}>{name}</h2>
         <div className={styles.status}>
-          <span className={isPublished ? styles.dotLive : styles.dotDraft}>●</span>
+          <span className={isPublished ? styles.dotLive : styles.dotDraft} aria-hidden="true" />
           <span className={styles.statusLabel}>{isPublished ? 'Live' : 'Draft'}</span>
         </div>
       </div>
@@ -58,8 +58,8 @@ const styles = {
   owner: cn('text-gd-muted text-xs'),
   name: cn('text-gd-text text-base font-semibold'),
   status: cn('mt-2 flex items-center gap-1.5'),
-  dotLive: cn('text-gd-accent text-xs'),
-  dotDraft: cn('text-gd-muted text-xs'),
+  dotLive: cn('bg-gd-accent h-1.5 w-1.5 rounded-full'),
+  dotDraft: cn('bg-gd-muted h-1.5 w-1.5 rounded-full opacity-50'),
   statusLabel: cn('text-gd-muted text-xs'),
   footer: cn('flex items-center gap-4'),
   editLink: cn('text-gd-accent hover:text-gd-accent-glow text-sm font-medium transition-colors'),

@@ -13,6 +13,7 @@ function RepoForm() {
         type="url"
         name="url"
         required
+        autoFocus
         placeholder="https://github.com/owner/repo"
         className={styles.input}
       />

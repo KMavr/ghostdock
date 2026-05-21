@@ -1,0 +1,16 @@
+[
+  {
+    "date": "2026-05-21",
+    "macrostructure": "Narrative Workflow",
+    "theme": "ghostdock-dark",
+    "enrichment": "none",
+    "brief": "GhostDock home page (/) redesign — marketing front door, ghost-pirate themed"
+  },
+  {
+    "date": "2026-05-21",
+    "macrostructure": "Marquee Hero",
+    "theme": "custom-neutral",
+    "enrichment": "none",
+    "brief": "GhostDock PublicPage (/p/[slug]) redesign — generated project landing page"
+  }
+]
