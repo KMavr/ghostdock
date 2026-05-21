@@ -36,7 +36,7 @@ export const ingestRepo = async (url: string, userId: string): Promise<{ id: str
   const existing = await db.query.projects.findFirst({
     where: and(
       eq(projects.userId, userId),
-      eq(projects.repoUrl, `github.com/${parsed.owner}/${parsed.repo}`),
+      eq(projects.repoUrl, `https://github.com/${parsed.owner}/${parsed.repo}`),
     ),
   });
 
@@ -62,7 +62,7 @@ export const ingestRepo = async (url: string, userId: string): Promise<{ id: str
     .insert(projects)
     .values({
       userId: userId,
-      repoUrl: `github.com/${parsed.owner}/${parsed.repo}`,
+      repoUrl: `https://github.com/${parsed.owner}/${parsed.repo}`,
       repoOwner: parsed.owner,
       repoName: parsed.repo,
       fetchedAt: new Date(),

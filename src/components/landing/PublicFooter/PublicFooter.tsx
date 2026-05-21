@@ -1,4 +1,5 @@
 import { LuArrowUpRight } from 'react-icons/lu';
+import Attribution from '@/components/landing/PublicFooter/components/Attribution';
 import { cn } from '@/lib/utils/cn';
 
 interface PublicFooterProps {
@@ -14,19 +15,6 @@ function PublicFooter({ repoUrl }: PublicFooterProps) {
         <LuArrowUpRight className={styles.icon} aria-hidden="true" />
       </a>
     </footer>
-  );
-}
-
-// Free-tier attribution. Phase 5: render only when the project owner is on the free plan.
-function Attribution() {
-  return (
-    <a
-      href="https://ghostdock.com"
-      target="_blank"
-      rel="noopener noreferrer"
-      className={styles.link}>
-      Hoisted by GhostDock <span aria-hidden="true">⚓</span>
-    </a>
   );
 }
 

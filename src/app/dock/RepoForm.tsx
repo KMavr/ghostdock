@@ -1,11 +1,19 @@
 'use client';
 
-import { useActionState } from 'react';
+import { useActionState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { submitRepo } from '@/app/dock/actions';
 import { cn } from '@/lib/utils/cn';
 
 function RepoForm() {
+  const router = useRouter();
   const [state, formAction, pending] = useActionState(submitRepo, null);
+
+  useEffect(() => {
+    if (state && 'projectId' in state) {
+      router.push(`/dock/project/${state.projectId}`);
+    }
+  }, [state, router]);
 
   return (
     <form action={formAction} className={styles.form}>
@@ -20,7 +28,7 @@ function RepoForm() {
       <button type="submit" disabled={pending} className={styles.button}>
         {pending ? 'Charting course...' : 'Chart Course'}
       </button>
-      {state?.error && <p className={styles.error}>{state.error}</p>}
+      {state && 'error' in state && <p className={styles.error}>{state.error}</p>}
     </form>
   );
 }
