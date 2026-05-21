@@ -9,20 +9,18 @@
   --gd-surface-2: #123322;
   --gd-accent: #00c47a;
   --gd-accent-glow: #00e5a0;
-  --gd-purple: #a855c8;
-  --gd-amber: #e8a040;
   --gd-text: #f5f9f5;
   --gd-muted: #c8d0cc;
-  --gd-error: #c4622a;
+  --gd-error: #c44030;
 
   /* Public-page palette (/p/*) — neutral, decoupled from --gd-*. Light by default. */
-  --pp-paper: oklch(98.5% 0.003 250);
-  --pp-paper-2: oklch(96.5% 0.004 250);
-  --pp-rule: oklch(90% 0.005 250);
-  --pp-muted: oklch(48% 0.008 250);
-  --pp-ink: oklch(22% 0.01 250);
-  --pp-ink-strong: oklch(15% 0.012 250);
-  --pp-focus: oklch(58% 0.15 250);
+  --pp-paper: #f8f9fb;
+  --pp-paper-2: #f1f3f7;
+  --pp-rule: #e1e4ea;
+  --pp-muted: #5e6472;
+  --pp-ink: #2e313c;
+  --pp-ink-strong: #1c1f2c;
+  --pp-focus: #506cfa;
 
   --pp-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --pp-ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
@@ -33,35 +31,35 @@
 /* Public page follows the visitor's OS preference until they override it. */
 @media (prefers-color-scheme: dark) {
   :root {
-    --pp-paper: oklch(20% 0.006 250);
-    --pp-paper-2: oklch(24% 0.007 250);
-    --pp-rule: oklch(32% 0.008 250);
-    --pp-muted: oklch(68% 0.008 250);
-    --pp-ink: oklch(93% 0.005 250);
-    --pp-ink-strong: oklch(97% 0.004 250);
-    --pp-focus: oklch(70% 0.14 250);
+    --pp-paper: #272a33;
+    --pp-paper-2: #30343f;
+    --pp-rule: #444956;
+    --pp-muted: #9ba1ae;
+    --pp-ink: #e8eaee;
+    --pp-ink-strong: #f5f6f9;
+    --pp-focus: #7b8ef7;
   }
 }
 
 /* Explicit visitor override — set on <html> by the public page. Wins over the media query. */
 [data-pp-theme='light'] {
-  --pp-paper: oklch(98.5% 0.003 250);
-  --pp-paper-2: oklch(96.5% 0.004 250);
-  --pp-rule: oklch(90% 0.005 250);
-  --pp-muted: oklch(48% 0.008 250);
-  --pp-ink: oklch(22% 0.01 250);
-  --pp-ink-strong: oklch(15% 0.012 250);
-  --pp-focus: oklch(58% 0.15 250);
+  --pp-paper: #f8f9fb;
+  --pp-paper-2: #f1f3f7;
+  --pp-rule: #e1e4ea;
+  --pp-muted: #5e6472;
+  --pp-ink: #2e313c;
+  --pp-ink-strong: #1c1f2c;
+  --pp-focus: #506cfa;
 }
 
 [data-pp-theme='dark'] {
-  --pp-paper: oklch(20% 0.006 250);
-  --pp-paper-2: oklch(24% 0.007 250);
-  --pp-rule: oklch(32% 0.008 250);
-  --pp-muted: oklch(68% 0.008 250);
-  --pp-ink: oklch(93% 0.005 250);
-  --pp-ink-strong: oklch(97% 0.004 250);
-  --pp-focus: oklch(70% 0.14 250);
+  --pp-paper: #272a33;
+  --pp-paper-2: #30343f;
+  --pp-rule: #444956;
+  --pp-muted: #9ba1ae;
+  --pp-ink: #e8eaee;
+  --pp-ink-strong: #f5f6f9;
+  --pp-focus: #7b8ef7;
 }
 
 @theme inline {
@@ -73,8 +71,6 @@
   --color-gd-surface-2: var(--gd-surface-2);
   --color-gd-accent: var(--gd-accent);
   --color-gd-accent-glow: var(--gd-accent-glow);
-  --color-gd-purple: var(--gd-purple);
-  --color-gd-amber: var(--gd-amber);
   --color-gd-text: var(--gd-text);
   --color-gd-muted: var(--gd-muted);
   --color-gd-error: var(--gd-error);
