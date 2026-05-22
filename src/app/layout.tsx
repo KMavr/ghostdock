@@ -15,10 +15,22 @@ const geistMono = Geist_Mono({
   subsets: ['latin'],
 });
 
+const description = 'Turn any public GitHub repo into a beautiful landing page — in seconds.';
+
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000'),
   title: 'GhostDock',
-  description: 'Turn any public GitHub repo into a beautiful landing page — in seconds.',
+  description,
+  openGraph: {
+    title: 'GhostDock',
+    description,
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'GhostDock',
+    description,
+  },
 };
 
 // Clerk's accessible dark base theme, tinted with the GhostDock accent.
