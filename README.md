@@ -9,7 +9,7 @@ GhostDock takes a public GitHub repository URL, reads its README and metadata, a
 generates a polished public page at `/p/<slug>` — no configuration, no AI, no manual
 content entry. Paste a URL, tweak a few fields, publish.
 
-<!-- Add a screenshot at docs/screenshot.png and reference it here. -->
+![The GhostDock home page](docs/screenshot.png)
 
 ## How it works
 
