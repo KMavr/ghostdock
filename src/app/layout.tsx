@@ -17,8 +17,16 @@ const geistMono = Geist_Mono({
 
 const description = 'Turn any public GitHub repo into a beautiful landing page — in seconds.';
 
+// The deployed site URL. localhost is used only for local development.
+// NEXT_PUBLIC_SITE_URL overrides it (e.g. once a custom domain is added).
+const resolveSiteUrl = () => {
+  if (process.env.NEXT_PUBLIC_SITE_URL) return process.env.NEXT_PUBLIC_SITE_URL;
+  if (process.env.NODE_ENV === 'development') return 'http://localhost:3000';
+  return 'https://ghostdock.vercel.app';
+};
+
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000'),
+  metadataBase: new URL(resolveSiteUrl()),
   title: 'GhostDock',
   description,
   openGraph: {
