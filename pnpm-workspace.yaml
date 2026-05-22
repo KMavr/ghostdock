@@ -3,3 +3,6 @@ allowBuilds:
   esbuild: true
   sharp: true
   unrs-resolver: true
+
+# Only install package versions published at least one week ago (value in minutes).
+minimumReleaseAge: 10080
