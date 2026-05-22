@@ -4,5 +4,10 @@ allowBuilds:
   sharp: true
   unrs-resolver: true
 
-# Only install package versions published at least one week ago (value in minutes).
-minimumReleaseAge: 10080
+# Only install package versions published at least one day ago (value in minutes).
+minimumReleaseAge: 1440
+
+overrides:
+  js-cookie: ^3.0.6 # GHSA-qjx8-664m-686j
+  esbuild: ^0.28.0  # GHSA-67mh-4wv8-2f99
+  postcss: ^8.5.10  # GHSA-qx2v-qp2m-jg93
