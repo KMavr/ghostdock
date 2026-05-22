@@ -10,7 +10,9 @@ function DockFormContent({ title, subtitle }: DockFormContentProps) {
   return (
     <div className={styles.wrapper}>
       <div className={styles.header}>
-        <h1 className={styles.title}>{title}</h1>
+        <h1 id="dock-form-title" className={styles.title}>
+          {title}
+        </h1>
         <p className={styles.subtitle}>{subtitle}</p>
       </div>
       <RepoForm />
