@@ -8,6 +8,7 @@ import { cn } from '@/lib/utils/cn';
 function RepoForm() {
   const router = useRouter();
   const [state, formAction, pending] = useActionState(submitRepo, null);
+  const error = state && 'error' in state ? state.error : null;
 
   useEffect(() => {
     if (state && 'projectId' in state) {
@@ -17,24 +18,35 @@ function RepoForm() {
 
   return (
     <form action={formAction} className={styles.form}>
+      <label htmlFor="repo-url" className={styles.label}>
+        GitHub repository URL
+      </label>
       <input
+        id="repo-url"
         type="url"
         name="url"
         required
         autoFocus
         placeholder="https://github.com/owner/repo"
+        aria-invalid={error ? true : undefined}
+        aria-describedby={error ? 'repo-url-error' : undefined}
         className={styles.input}
       />
       <button type="submit" disabled={pending} className={styles.button}>
         {pending ? 'Charting course...' : 'Chart Course'}
       </button>
-      {state && 'error' in state && <p className={styles.error}>{state.error}</p>}
+      {error && (
+        <p id="repo-url-error" role="alert" className={styles.error}>
+          {error}
+        </p>
+      )}
     </form>
   );
 }
 
 const styles = {
   form: cn('flex flex-col gap-3'),
+  label: cn('sr-only'),
   input: cn(
     'border-gd-surface-2 bg-gd-surface text-gd-text placeholder-gd-muted',
     'focus:border-gd-accent focus:ring-gd-accent w-full rounded-lg border px-4 py-3 transition outline-none focus:ring-1',

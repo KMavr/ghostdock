@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { LuX } from 'react-icons/lu';
 import DockFormContent from '@/app/dock/_components/DockFormContent/DockFormContent';
@@ -7,11 +8,28 @@ import { cn } from '@/lib/utils/cn';
 
 function NewProjectModal() {
   const router = useRouter();
+  const dialogRef = useRef<HTMLDialogElement>(null);
+
+  useEffect(() => {
+    dialogRef.current?.showModal();
+  }, []);
+
+  const close = () => router.back();
 
   return (
-    <div className={styles.backdrop} onClick={() => router.back()}>
-      <div className={styles.dialog} onClick={(e) => e.stopPropagation()}>
-        <button onClick={() => router.back()} className={styles.close} aria-label="Close">
+    <dialog
+      ref={dialogRef}
+      aria-labelledby="dock-form-title"
+      onCancel={(e) => {
+        e.preventDefault();
+        close();
+      }}
+      onClick={(e) => {
+        if (e.target === dialogRef.current) close();
+      }}
+      className={styles.dialog}>
+      <div className={styles.panel}>
+        <button type="button" onClick={close} className={styles.close} aria-label="Close">
           <LuX size={18} />
         </button>
         <DockFormContent
@@ -19,13 +37,17 @@ function NewProjectModal() {
           subtitle="Paste a public GitHub repo URL to get started."
         />
       </div>
-    </div>
+    </dialog>
   );
 }
 
 const styles = {
-  backdrop: cn('fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm'),
   dialog: cn(
+    'm-0 h-dvh max-h-dvh w-dvw max-w-dvw bg-transparent p-6',
+    'flex items-center justify-center',
+    'backdrop:bg-black/60 backdrop:backdrop-blur-sm',
+  ),
+  panel: cn(
     'bg-gd-surface border-gd-surface-2 relative w-full max-w-md rounded-xl border p-8 shadow-2xl',
   ),
   close: cn(
