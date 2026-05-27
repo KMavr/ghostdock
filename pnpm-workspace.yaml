@@ -7,7 +7,10 @@ allowBuilds:
 # Only install package versions published at least one day ago (value in minutes).
 minimumReleaseAge: 1440
 
+minimumReleaseAgeExclude:
+  - debtctl@0.3.0
+
 overrides:
   js-cookie: ^3.0.6 # GHSA-qjx8-664m-686j
-  esbuild: ^0.28.0  # GHSA-67mh-4wv8-2f99
-  postcss: ^8.5.10  # GHSA-qx2v-qp2m-jg93
+  esbuild: ^0.28.0 # GHSA-67mh-4wv8-2f99
+  postcss: ^8.5.10 # GHSA-qx2v-qp2m-jg93
