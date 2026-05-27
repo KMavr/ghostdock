@@ -1,0 +1,33 @@
+{
+  "version": 2,
+  "overrides": {
+    "js-cookie": {
+      "reason": "GHSA-qjx8-664m-686j",
+      "owner": "KMavr",
+      "revisitWhen": {
+        "type": "version-anchor",
+        "package": "@clerk/nextjs",
+        "declaredRange": "^7.3.5"
+      }
+    },
+    "esbuild": {
+      "reason": "GHSA-67mh-4wv8-2f99",
+      "owner": "KMavr",
+      "revisitWhen": {
+        "type": "version-anchor",
+        "package": "drizzle-kit",
+        "declaredRange": "^0.31.10"
+      }
+    },
+    "postcss": {
+      "reason": "GHSA-qx2v-qp2m-jg93",
+      "owner": "KMavr",
+      "revisitWhen": {
+        "type": "version-anchor",
+        "package": "next",
+        "declaredRange": "^16.2.6"
+      }
+    }
+  },
+  "patches": {}
+}
