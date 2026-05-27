@@ -25,7 +25,7 @@
       "revisitWhen": {
         "type": "version-anchor",
         "package": "next",
-        "declaredRange": "^16.2.6"
+        "declaredRange": "16.2.6"
       }
     }
   },
