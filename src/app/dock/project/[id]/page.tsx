@@ -1,4 +1,4 @@
-import { eq } from 'drizzle-orm';
+import { eq, and } from 'drizzle-orm';
 import { notFound } from 'next/navigation';
 import { updateProject } from '@/app/dock/project/[id]/actions';
 import ProjectForm from '@/app/dock/project/[id]/ProjectForm';
@@ -7,6 +7,7 @@ import HeroSection from '@/components/landing/HeroSection/HeroSection';
 import InstallSection from '@/components/landing/InstallSection/InstallSection';
 import PublishButton from '@/components/landing/PublishButton/PublishButton';
 import UsageSection from '@/components/landing/UsageSection/UsageSection';
+import { getCurrentUser } from '@/lib/auth/getCurrentUser';
 import { db } from '@/lib/db';
 import { projects } from '@/lib/db/schema';
 import type { ParsedSections } from '@/lib/parse/sections';
@@ -19,7 +20,12 @@ interface ProjectPageProps {
 async function ProjectPage({ params }: ProjectPageProps) {
   const { id } = await params;
 
-  const project = await db.query.projects.findFirst({ where: eq(projects.id, id) });
+  const user = await getCurrentUser();
+  if (!user) return notFound();
+
+  const project = await db.query.projects.findFirst({
+    where: and(eq(projects.id, id), eq(projects.userId, user.id)),
+  });
 
   if (!project) {
     return notFound();

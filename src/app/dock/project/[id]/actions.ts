@@ -13,7 +13,7 @@ export type ActionState = { error: string } | null;
 type Project = InferSelectModel<typeof projects>;
 type AuthorizedProject =
   | { project: Project; error?: undefined }
-  | { error: ActionState; project?: undefined };
+  | { error: NonNullable<ActionState>; project?: undefined };
 
 const getAuthorizedProject = async (id: string): Promise<AuthorizedProject> => {
   const user = await getCurrentUser();
@@ -53,6 +53,12 @@ export const updateProject = async (
         updatedAt: new Date(),
       })
       .where(eq(projects.id, id));
+
+    if (result.project.isPublished) {
+      for (const s of new Set([result.project.slug, slug].filter(Boolean))) {
+        revalidatePath(`/p/${s}`);
+      }
+    }
   } catch (err) {
     return { error: err instanceof Error ? err.message : 'Something went wrong' };
   }
